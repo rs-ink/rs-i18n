@@ -1,6 +1,3 @@
-## keywords
-    i18n deep merge 
-
 # Starter
  yarn add  rs-i18n
 ## Description

@@ -1,6 +1,6 @@
 {
   "name": "rs-i18n",
-  "version": "0.0.4",
+  "version": "0.0.7",
   "description": "fast Deep merge and translation i18n json file",
   "main": "rs-i18n.js",
   "bin": "./bin/rs-i18n.js",
@@ -15,10 +15,11 @@
     "type": "git",
     "url": "https://github.com/rs-ink/rs-i18n"
   },
-  "tags": [
+  "keywords": [
     "i18n",
     "百度翻译",
-    "deep merge"
+    "deep merge",
+    "json"
   ],
   "dependencies": {
     "commander": "^5.1.0",
