@@ -17,9 +17,11 @@
   },
   "keywords": [
     "i18n",
-    "百度翻译",
     "deep merge",
-    "json"
+    "json",
+    "百度翻译",
+    "国际化",
+    "深度合并"
   ],
   "dependencies": {
     "commander": "^5.1.0",
