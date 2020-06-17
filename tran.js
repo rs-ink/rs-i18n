@@ -3,6 +3,15 @@ const {toObj, toExpandJson} = require('./util');
 const {baiduTran} = require('./client/baiduTran');
 const fs = require('fs');
 const path = require('path');
+
+const translationFormat = (value, debug) => {
+    if (!debug || debugFormat === "" || debugFormat === undefined) {
+        return value
+    } else {
+        return debugFormat.replace(/{%s}/g, value);
+    }
+}
+
 const tranJson = async (source = {}, target = {}, options = {
     transfer: false,
     to: 'zh',
@@ -17,18 +26,14 @@ const tranJson = async (source = {}, target = {}, options = {
             if (options.transfer) {
                 let {body} = await baiduTran(value, options.to);
                 if (body['trans_result']) {
-                    if (options.debug) {
-                        d2[key] = debugFormat.replace(/{%s}/g, body['trans_result'][0]['dst']);
-                    } else {
-                        d2[key] = body['trans_result'][0]['dst'];
-                    }
+                    d2[key] = translationFormat(body['trans_result'][0]['dst'], options.debug)
                     console.log('trans_result: ', JSON.stringify(body));
                 } else {
                     d2[key] = value;
                     console.log('translate err：', {key, value}, body);
                 }
             } else {
-                console.log('new Key: ', key, value);
+                console.log('new Key: ', key, "\t=>\t", value);
                 d2[key] = value;
             }
         }

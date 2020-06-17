@@ -10,7 +10,7 @@ function commaSeparatedList(value, dummyPrevious) {
 program
     .version(pkg.version)
     .helpOption('-e, --help', 'read more information')
-    .requiredOption('-lan, --languages <type>', 'add the specified type of cheese', commaSeparatedList)
+    .requiredOption('-lan, --languages <type>', 'Target language, delimited', commaSeparatedList)
     .option('-t, --translation', "auto translation, e.g. zh-CN=>zh")
     .option('-d, --debug', "debug mode format rs-i18n.env.FORMAT")
 program.parse(process.argv);
@@ -61,7 +61,11 @@ for (let filePath of fss) {
     for (let lan of program.languages) {
         let targetFilePath = filePath.replace(env.baseLanguage, lan);
         let target = getFileJson(targetFilePath);
-        tranJson(source, target, {transfer: true, to: env.getTargetTo(lan), debug: program.debug}).then(data => {
+        tranJson(source, target, {
+            transfer: program.translation,
+            to: env.getTargetTo(lan),
+            debug: program.debug
+        }).then(data => {
             util.writeFileRecursive(targetFilePath, JSON.stringify(data, null, '\t'));
         });
     }

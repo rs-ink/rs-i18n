@@ -1,8 +1,8 @@
 {
   "name": "rs-i18n",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "fast Deep merge and translation i18n json file",
-  "main": "tran.js",
+  "main": "rs-i18n.js",
   "bin": "./bin/rs-i18n.js",
   "scripts": {
     "test": "env-cmd -f ./config/dev.js node rs-i18n.js -lan zh-CN,jp",
@@ -11,6 +11,15 @@
   },
   "author": "frank <8756012@qq.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rs-ink/rs-i18n"
+  },
+  "tags": [
+    "i18n",
+    "百度翻译",
+    "deep merge"
+  ],
   "dependencies": {
     "commander": "^5.1.0",
     "dotenv": "^8.2.0",
