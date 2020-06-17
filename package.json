@@ -1,7 +1,7 @@
 {
   "name": "rs-i18n",
-  "version": "0.0.7",
-  "description": "fast Deep merge and translation i18n json file",
+  "version": "0.0.9",
+  "description": "fast Deep merge and translation i18n json file ,In the process of international development, automatically merge and translate JSON files in other languages",
   "main": "rs-i18n.js",
   "bin": "./bin/rs-i18n.js",
   "scripts": {

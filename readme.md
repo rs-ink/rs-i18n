@@ -1,9 +1,14 @@
 # Starter
- yarn add  rs-i18n
+````$xslt
+yarn add --dev rs-i18n
+rs-i18n -lan zh-CN
+````
+
 ## Description
     1、deep merge to Add other i18n language json file
     2、Automatic translation using Baidu translation API
     3、debug mode format 
+    4、In the process of international development, automatically merge and translate JSON files in other languages
 ## Step1 
     rs-i18n.env file or env-cmd -f ./config/dev.js 
 create file rs-i18n.env
@@ -34,4 +39,4 @@ Options:
   -d, --debug               debug mode format rs-i18n.env.FORMAT
   -e, --help                read more information
 ````
-
+## 百度通用翻译API   https://api.fanyi.baidu.com
