@@ -28,15 +28,21 @@ create file rs-i18n.env
 ````
     rs-i18n -td -lan zh-CN
 ````
+## recommend
+Add system environment variable RS_I18N_BAIDU_APP_ID && RS_I18N_BAIDU_APP_SECRET
+
 ## help
 ````$xslt
 rs-i18n -e
 Usage: rs-i18n [options]
 Options:
-  -V, --version             output the version number
-  -lan, --languages <type>  Target language, delimited
-  -t, --translation         auto translation, e.g. zh-CN=>zh
-  -d, --debug               debug mode format rs-i18n.env.FORMAT
-  -e, --help                read more information
+  -V, --version              output the version number
+  -lan, --languages <type>   Target language, delimited
+  -t, --translation          auto translation, e.g. zh-CN=>zh
+  -d, --debug                debug mode format rs-i18n.env.FORMAT
+  -f, --fromLanguage <type>  force baseLanguage
+  -e, --help                 read more information
+
 ````
-## 百度通用翻译API   https://api.fanyi.baidu.com
+## Baidu general translation API
+   https://api.fanyi.baidu.com
