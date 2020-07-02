@@ -1,13 +1,13 @@
 {
   "name": "rs-i18n",
-  "version": "0.0.10",
+  "version": "0.1.0-RC",
   "description": "fast Deep merge and translation i18n json file ,In the process of international development, automatically merge and translate JSON files in other languages",
   "main": "rs-i18n.js",
   "bin": "./bin/rs-i18n.js",
   "scripts": {
     "test": "env-cmd -f ./config/dev.js node rs-i18n.js -lan zh-CN,jp",
     "help": "node rs-i18n.js -e",
-    "test_zh-CN": "env-cmd -f ./config/dev.js node rs-i18n.js -lan zh-CN -td",
+    "test_zh-CN": "env-cmd -f ./config/dev.js node rs-i18n.js -lan zh-CN -ti",
     "test-From-zh": "env-cmd -f ./config/dev.js node rs-i18n.js -f zh-CN -lan zh-CN  -td"
   },
   "author": "frank <8756012@qq.com>",

@@ -1,7 +1,7 @@
 require('./init')
 const pkg = require("./package.json");
 const program = require('commander');
-const logger = require("log4js").getLogger(pkg.name);
+const logger =require("./logger").logger("rs-i18n[main]");
 const fs = require("fs");
 const path = require("path");
 
@@ -15,6 +15,7 @@ program
     .requiredOption('-lan, --languages <type>', 'Target language, delimited', commaSeparatedList)
     .option('-t, --translation', "auto translation, e.g. zh-CN=>zh")
     .option('-d, --debug', "debug mode format rs-i18n.env.FORMAT")
+    .option('-i, --info', "show verbose info file and line code")
     .option('-f, --fromLanguage <type>', "force baseLanguage")
 
 program.parse(process.argv);
@@ -22,17 +23,17 @@ const env = require("./env");
 
 if (program.translation) {
     if (!(env.baiduAppId && env.baiduAppSecret)) {
-        console.log("not exits rs-i18n.env.RS_I18N_BAIDU_APP_ID or rs-i18n.env.RS_I18N_BAIDU_APP_SECRET")
+        logger.error("not exits rs-i18n.env.RS_I18N_BAIDU_APP_ID or rs-i18n.env.RS_I18N_BAIDU_APP_SECRET")
         process.exit(-1);
     } else {
-        console.log("baidu appId: ", env.baiduAppId)
+        logger.info("baidu appId: ", env.baiduAppId)
     }
 }
 
 if (env.localesDir) {
-    console.log("target locales dir: ", env.localesDir);
+    logger.info("target locales dir: ", env.localesDir);
 } else {
-    console.log("not exits rs-i18n.env.RS_I18N_LOCALES_DIR ");
+    logger.error("not exits rs-i18n.env.RS_I18N_LOCALES_DIR ");
     process.exit(-1)
 }
 let baseLanguage = env.baseLanguage;
@@ -48,28 +49,28 @@ if (languages.length === 0) {
     console.log("")
     process.exit(-1);
 } else {
-    console.log("current Languages:", languages)
+    logger.info("current Languages:", languages)
 }
 
 
 if (baseLanguage) {
-    console.log("baseLanguage: ", baseLanguage);
+    logger.info("baseLanguage: ", baseLanguage);
 } else {
     if (languages.length === 0) {
         console.log("")
         process.exit(-1);
     } else {
         baseLanguage = languages[0];
-        console.log("baseLanguage", baseLanguage, " from currentLanguages[0]")
+        logger.info("baseLanguage", baseLanguage, " from currentLanguages[0]")
     }
 }
 
 
 if (program.debug) {
-    console.log("debug mode, debug format: ", env.debugFormat);
+    logger.info("debug mode, debug format: ", env.debugFormat);
 }
 if (program.translation) {
-    console.log("translation mode")
+    logger.info("translation mode")
 }
 
 console.log("\r\n")
@@ -78,22 +79,47 @@ const util = require('./util');
 let fss = listLocalesJson(env.localesDir, baseLanguage);
 
 
-console.log("all locales json files: ", fss)
+logger.info("all locales json files: ", fss)
 program.languages.forEach(lan => {
-    console.log("target Language:" + lan + "=>" + env.getTargetTo(lan))
+    logger.info("target Language: " + lan + " => " + env.getTargetTo(lan))
 })
 
-for (let filePath of fss) {
-    let source = getFileJson(filePath);
-    for (let lan of program.languages) {
+for (let lan of program.languages) {
+    for (let filePath of fss) {
+        let source = getFileJson(filePath);
         let targetFilePath = filePath.replace(baseLanguage, lan);
         let target = getFileJson(targetFilePath);
         tranJson(source, target, {
             transfer: program.translation,
+            from: env.getTargetTo(baseLanguage),
             to: env.getTargetTo(lan),
-            debug: program.debug
+            debug: program.debug,
+            arrayResult: program.info
         }).then(data => {
-            util.writeFileRecursive(targetFilePath, JSON.stringify(data, null, '\t'));
+            if (program.info) {
+                let content = JSON.stringify(util.ExpandJson({...data[1], ...data[2]}), null, "\t");
+                util.writeFileRecursive(targetFilePath, content);
+                let arr = content.split("\n");
+                Object.keys(data[2]).forEach(item => {
+                    let v0 = data[0][item];
+                    let v = data[2][item];
+                    let key = item.split(env.seq).slice(-1).join("") + `": "` + v + `"`
+                    let line = getLineNumber(arr,key)
+                    logger.info("./" + targetFilePath.replace(/\\/g,"/") + ":" + line + "\t" + v0 + "\t===>>>\t" + v)
+                })
+            } else {
+                util.writeFileRecursive(targetFilePath, JSON.stringify(util.ExpandJson(data), null, '\t'));
+            }
         });
     }
+}
+const getLineNumber = (contents,target)=>{
+   return contents.reduce((line,item,index)=>{
+        if(line === -1){
+            if(item.indexOf(target)!==-1){
+                line=index+1;
+            }
+        }
+        return line;
+    },-1);
 }

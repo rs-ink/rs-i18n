@@ -1,10 +1,10 @@
 const targetPrefix = "RS_I18N_LAN_"
-
+const logger = require("./logger").logger("rs-i18n[env]")
 const targetCache = Object.keys(process.env).filter(k => k.startsWith(targetPrefix)).reduce((cache, key) => {
     cache[key.replace(targetPrefix, "")] = process.env[key];
     return cache;
 }, {});
-console.log("baidu translation to: ", targetCache)
+logger.info("baidu translation to: ", targetCache)
 module.exports = {
     seq: '____',
     suffix: process.env.RS_I18N_TARGET_FILE_SUFFIX,
@@ -15,7 +15,7 @@ module.exports = {
     debugFormat: process.env.RS_I18N_DEBUG_FORMAT,
     getTargetTo: (lan) => {
         let to = targetCache[lan]
-        return (to === undefined || to === "") ? lan.split("-")[0] : to;
+        return (to === undefined || to === "") ? lan.split("_")[0].split("-")[0] : to;
     },
 };
 
